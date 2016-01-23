@@ -1,0 +1,78 @@
+<html>
+<head>
+    <title>My Blog</title>
+    <script src= "http://code.jquery.com/jquery-2.1.1.js"> </script>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'blogapp/style.css' %}" />
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <ul class="nav navbar-nav">
+            {% if user != None %}
+            <li><a class="navar-brand" href="#">{{ user.username }}</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#addblog">Add Blog!</a></li>
+            {% else %}
+            <li><a href="#" data-toggle="modal" data-target="#login">Login!</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <header class="page-header centerdiv">
+        <h1> Blog Articles </h1>
+    </header>
+
+    <div class="blog well">
+        {% for blog in blogs %}
+            <div class="blog-content">
+                <div class="page-header">
+                    <h3>{{ blog.title }}</h3>
+                    <small>{{ blog.author }}</small>
+                </div>
+                {{ blog.content }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="modal fade" id="login">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="modal-body login">
+                        <b>Username</b>
+                        <input class="form-control" name="username"></input>
+                        <b>Password</b>
+                        <input class="form-control" name="password"></input>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class = "btn btn-success pull-left" value = "Login!"/>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addblog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/addblog/" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body login">
+                        <b>Title</b>
+                        <input class="form-control" name="title"></input>
+                        <b>Blog Content</b>
+                        <input class="form-control" name="blog_content"></input>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class = "btn btn-success pull-left" value = "Add Blog"/>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
